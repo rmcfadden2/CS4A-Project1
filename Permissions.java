@@ -1,3 +1,5 @@
+// test comment
+
 public interface Permissions 
 {
     public boolean hasPermission(String user);
