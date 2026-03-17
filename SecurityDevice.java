@@ -53,11 +53,17 @@ public class SecurityDevice extends SmartHome implements Permissions
         return this.location;
     }
 
-    public void detectMotion()
+    public void detectMotion() throws DeviceNotOn
     {
+        if(!getIsOn())
+        {
+            throw new DeviceNotOn("Cannot detect motion because the device is OFF.");
+        }
         motionDetected = true;
         if(alarmArmed)
+        {
             System.out.println("ALERT: Motion detected at " + this.location);
+        }
     }
 
     public void resetMotion()
@@ -88,18 +94,23 @@ public class SecurityDevice extends SmartHome implements Permissions
         return this.getIsExpired();
     }
 
-    @Override
-    public String toString() {
-        return "Device Name: " + this.getName() + 
-                "\nLocation: " + this.location +
-                "\nColor: " + this.getColor() + 
-                "\nYearMade: " + this.getYearMade() +
-                "\nDate Added: " + this.getDateAdded().toString() + 
-                "\nIs the Device On: " + this.getIsOn() + 
-                "\nHas Warenty Expired: " + this.isExpired() + 
-                "\nIs the System Armed: " + this.isArmed() + 
-                "\nMotion Detected    : " + motionDetected;
-    }
+@Override
+public String toString() {
+    // 25 => Width of column, %s => String, %n => newline, -  => Left align
+    StringBuilder sb = new StringBuilder();
+    sb.append("-------------------------------------------------------\n");
+    sb.append(String.format("%-25s %s%n", "Device Name:", this.getName()));
+    sb.append(String.format("%-25s %s%n", "Location:", this.location));
+    sb.append(String.format("%-25s %s%n", "Color:", this.getColor()));
+    sb.append(String.format("%-25s %d%n", "Year Made:", this.getYearMade()));
+    sb.append(String.format("%-25s %s%n", "Date Added:", this.getDateAdded()));
+    sb.append(String.format("%-25s %b%n", "Is the Device On:", this.getIsOn()));
+    sb.append(String.format("%-25s %b%n", "Has Warranty Expired:", this.isExpired()));
+    sb.append(String.format("%-25s %b%n", "Is the System Armed:", this.isArmed()));
+    sb.append(String.format("%-25s %b%n", "Motion Detected:", this.motionDetected));
+    sb.append("-------------------------------------------------------\n");
+    return sb.toString();
+}
 
     // implementing Permissions interface
     @Override
@@ -123,8 +134,12 @@ public class SecurityDevice extends SmartHome implements Permissions
     }
 
     @Override
-    public void removePermission(String user)
+    public void removePermission(String user) throws InvalidPermission
     {
+        if(!allowedUsers.contains(user))
+        {
+            throw new InvalidPermission("Unable to remove. User does not have Permission!");
+        }
         allowedUsers.remove(user);
     }
 

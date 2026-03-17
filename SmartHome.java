@@ -82,7 +82,7 @@ public abstract class SmartHome {
                 "\nYearMade: " + yearMade +
                 "\nDate Added: " + dateAdded.toString() + 
                 "\nIs the Device On: " + isOn + 
-                "\nHas Warenty Expired: " + isExpired + 
+                "\nHas Warranty Expired: " + isExpired + 
                 "\n";
     }
 
