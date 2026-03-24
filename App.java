@@ -65,9 +65,14 @@ public class App {
                     
                     try
                     {
+                        if(!input.hasNextInt())
+                        {
+                            input.next();
+                            throw new Exception("Exiting...");
+                        }
                         deviceInput = input.nextInt() - 1;
 
-                        if(deviceInput < 1 || deviceInput > 2)
+                        if(deviceInput < 0 || deviceInput > 1)
                         {
                             throw new Exception("Exiting...");
                         }
@@ -175,7 +180,7 @@ public class App {
                     {
                         deviceInput = input.nextInt() + 1;
 
-                        if(deviceInput < 3 || deviceInput > 4)
+                        if(deviceInput < 2 || deviceInput > 3)
                         {
                             throw new Exception("Exiting...");
                         }
@@ -233,7 +238,7 @@ public class App {
                     {
                         deviceInput = input.nextInt() + 3;
 
-                        if(deviceInput < 5 || deviceInput > 6)
+                        if(deviceInput < 4 || deviceInput > 5)
                         {
                             throw new Exception("Exiting...");
                         }
