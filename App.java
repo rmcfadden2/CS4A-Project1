@@ -13,7 +13,8 @@ public class App {
         smartDevices.add(new UtilityDevice("Light Bulb"   , "Yellow", 2005,8));
         smartDevices.add(new UtilityDevice("Smart Fridge" , "Grey"  , 2018,300));
 
-        smartDevices.add(new ComfortDevice("Smart Thermostat"  , "Light Grey", 2014,66));
+        smartDevices.add(new ComfortDevice("Smart Thermostat"  , "Light Grey", 2014, 66, 0,0)); // Tried playing with this. Note:
+                                                                                                                                               // Constructore was missing parameters
         smartDevices.add(new ComfortDevice("Smart Ceiling Fan" , "White"     , 2017,68));
 
         // for(SmartHome device : smartDevices)
@@ -258,10 +259,24 @@ public class App {
                             break;
 
                             case 1:
+                                System.out.println("DEBUG: isOn =" + ((ComfortDevice)smartDevices.get(deviceInput)).getIsOn());
                                 System.out.print("Enter temperature: ");
                                 int temperature = input.nextInt();
-                                System.out.println("Changing temperature to" + temperature);
-                                ((ComfortDevice)smartDevices.get(deviceInput)).setTemperatureSetting(temperature);
+                                input.nextLine();   // clears
+                                // Exception for setting temp, when device is off----------------
+                                // Menu input isn't working properly so I'll have to comment this
+                                // part out for now -MeiLi---------------------------------------
+                                // try{
+                                //     // Set temp while device off
+                                //     ((ComfortDevice)smartDevices.get(deviceInput)).setTemperatureSetting(temperature);
+                                //     System.out.println("Changing temperature to " + temperature);
+                                // }
+                                // catch(DeviceNotOn e) // Exception is met, and caught here
+                                // {
+                                //     System.out.println(e.getMessage());     // Prints error message
+                                // }
+                                
+
                             break;
 
                             case 2:

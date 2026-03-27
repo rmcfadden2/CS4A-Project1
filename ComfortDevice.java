@@ -24,7 +24,14 @@ public class ComfortDevice extends SmartHome {
     }
 
 
-    public void setTemperatureSetting(int temperatureSetting) {
+    public void setTemperatureSetting(int temperatureSetting) throws DeviceNotOn
+    {
+        // Device off, deny access
+        if(!getIsOn())
+        {
+            throw new DeviceNotOn("Failed to change temperature: device is OFF.");
+        }
+        // Working normally
         this.temperatureSetting = temperatureSetting;
     }
 
@@ -50,7 +57,7 @@ public class ComfortDevice extends SmartHome {
     public String toString() {
         return super.toString() + 
                "Temperature Setting: " + temperatureSetting + " F\n" +
-               "Temperature Setting: " + rpm + " rpm\n" +
+               "Fan Speed Setting: " + rpm + " rpm\n" +
                "TV Channel: " + channel + "\n";
     }
 }

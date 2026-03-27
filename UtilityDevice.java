@@ -29,7 +29,13 @@ public class UtilityDevice extends SmartHome {
         this.powerUsage = powerUsage;
     }
 
-    public void setBrightness(int brightness) {
+    public void setBrightness(int brightness) throws DeviceNotOn{
+        // Device off, deny access
+        if(!getIsOn())
+        {
+            throw new DeviceNotOn("Failed to change brightness: Device is OFF");
+        }
+        // working normally
         this.brightness = brightness;
     }
 
