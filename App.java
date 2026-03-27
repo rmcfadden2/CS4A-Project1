@@ -10,12 +10,12 @@ public class App {
         smartDevices.add(new SecurityDevice("Door Sensor", "White", 2025, true, "Front Door"));
         smartDevices.add(new SecurityDevice("Camera",      "White", 2016, false,"Backyard"));
 
-        smartDevices.add(new UtilityDevice("Light Bulb"   , "Yellow", 2005,8));
-        smartDevices.add(new UtilityDevice("Smart Fridge" , "Grey"  , 2018,300));
+        smartDevices.add(new Lightbulb("Smart Lightbulb" , "Yellow"  , 2011,30,100));
+        smartDevices.add(new Vacuum(   "Smart Vacuum"    , "Black"   , 2018,300,false));
 
-        smartDevices.add(new ComfortDevice("Smart Thermostat"  , "Light Grey", 2014, 66, 0,0)); // Tried playing with this. Note:
-                                                                                                                                               // Constructore was missing parameters
-        smartDevices.add(new ComfortDevice("Smart Ceiling Fan" , "White"     , 2017,68));
+        smartDevices.add(new Thermostat("Smart Thermostat"   , "Light Grey", 2014, 70));  
+        smartDevices.add(new CeilingFan("Smart Ceiling Fan"  , "White",      2014,                120));                                                                                                                     
+        smartDevices.add(new Television("Smart TV" ,           "Black"     , 2024,            68));
 
         // for(SmartHome device : smartDevices)
         // {
@@ -89,15 +89,15 @@ public class App {
                         
                         System.out.print("Enter option number: ");
 
-                        deviceOption = input.nextInt() - 1;
+                        deviceOption = input.nextInt();
 
                         switch(deviceOption)
                         {
-                            case 0:
+                            case 1:
                                 smartDevices.get(deviceInput).setIsOn(!smartDevices.get(deviceInput).getIsOn());
                             break;
 
-                            case 1:
+                            case 2:
                                 if(((SecurityDevice)smartDevices.get(deviceInput)).isArmed())
                                 {
                                     ((SecurityDevice)smartDevices.get(deviceInput)).disarmSystem();
@@ -108,11 +108,11 @@ public class App {
                                 }
                             break;
 
-                            case 2:
+                            case 3:
                                 ((SecurityDevice)smartDevices.get(deviceInput)).setIsOn(!((SecurityDevice)smartDevices.get(deviceInput)).getMotionDetected());
                             break;
 
-                            case 3:
+                            case 4:
                                 try 
                                 {
                                     System.out.println("\nAttempting to detect motion...");
@@ -124,22 +124,22 @@ public class App {
                                 }
                             break;
 
-                            case 4:
+                            case 5:
                                 System.out.println((SecurityDevice)smartDevices.get(deviceInput));
                             break;
 
-                            case 5:
+                            case 6:
                                 ((SecurityDevice)smartDevices.get(deviceInput)).showPermissions();
                             break;
 
-                            case 6:
+                            case 7:
                                 System.out.print("Enter user to add: ");
                                 String user = input.nextLine();
                                 System.out.println("Adding new user " + user + "...");
                                 ((SecurityDevice)smartDevices.get(deviceInput)).addPermission(user);
                             break;
 
-                            case 7:
+                            case 8:
                                 try
                                 {
                                     System.out.print("Enter user to remove: ");
@@ -154,17 +154,7 @@ public class App {
                             break;
 
                             default:
-                                try 
-                                {
-                                    if(deviceOption < 0 || deviceOption > 6)
-                                    {
-                                        throw new Exception("Exiting...");
-                                    }
-                                } 
-                                catch (Exception e) 
-                                {
-                                    System.out.println(e.getMessage());
-                                }
+                                throw new Exception("Exiting...");
                         }
                     }
                     catch(Exception e)
@@ -174,57 +164,103 @@ public class App {
                 break;
 
                 case 1:
-                    System.out.println("Utility Devices: \n1. Light Bulb\n2. Smart Fridge");
+                    System.out.println("Utility Devices: \n1. Light Bulb\n2. Smart Vacuum");
                     System.out.print("Which utility device do you wish to change?: ");
 
                     try
                     {
-                        deviceInput = input.nextInt() + 1;
+                        deviceInput = input.nextInt() + 1; // offset because it is also used as an index for the array list
 
-                        if(deviceInput < 2 || deviceInput > 3)
+                        switch(deviceInput)
                         {
-                            throw new Exception("Exiting...");
-                        }
+                            case 2: // Lightbulb
+                                System.out.println("\nDevice Functions: \n1. Toggle Power - "    +                 (smartDevices.get(deviceInput).getIsOn() ? "On" : "Off") +
+                                                                       "\n2. Set Power Usage - " +  ((UtilityDevice)smartDevices.get(deviceInput)).getPowerUsage()          +
+                                                                       "\n3. Set Brightness  - " +      ((Lightbulb)smartDevices.get(deviceInput)).getBrightness()          +
+                                                                       "\n4. Show Information");
 
-                        System.out.println("\nDevice Functions: \n1. Toggle Power - "    +                (smartDevices.get(deviceInput).getIsOn() ? "On" : "Off") +
-                                                               "\n2. Set Power Usage - " + ((UtilityDevice)smartDevices.get(deviceInput)).getPowerUsage()          + 
-                                                               "\n3. Show Information");
-                        
-                        System.out.print("Enter option number: ");
+                                System.out.print("Enter option number: ");
 
-                        deviceOption = input.nextInt() - 1;
+                                deviceOption = input.nextInt();
 
-                        switch(deviceOption)
-                        {
-                            case 0:
-                                smartDevices.get(deviceInput).setIsOn(!smartDevices.get(deviceInput).getIsOn());
+                                switch(deviceOption)
+                                {
+                                    case 1:
+                                        smartDevices.get(deviceInput).setIsOn(!smartDevices.get(deviceInput).getIsOn());
+                                    break;
+
+                                    case 2:
+                                        System.out.print("Enter power usage: ");
+                                        int power = input.nextInt();
+                                        System.out.println("Changing power usage to" + power);
+                                        ((UtilityDevice)smartDevices.get(deviceInput)).setPowerUsage(power);
+                                    break;
+
+                                    case 3:
+                                        System.out.print("Enter brightness: ");
+                                        int brightness = input.nextInt();
+
+                                        try
+                                        {
+                                            // Set temp while device off
+                                            ((Lightbulb)smartDevices.get(deviceInput)).setBrightness(brightness);
+                                            System.out.println("Changing brightness to " + brightness);
+                                        }
+                                        catch(DeviceNotOn e) // Exception is met, and caught here
+                                        {
+                                            System.out.println(e.getMessage());     // Prints error message
+                                        }
+                                    break;
+
+                                    case 4:
+                                        System.out.println(smartDevices.get(deviceInput));
+                                    break;
+
+                                    default:
+                                        throw new Exception("Exiting...");
+                                }
                             break;
 
-                            case 1:
-                                System.out.print("Enter power usage: ");
-                                int power = input.nextInt();
-                                System.out.println("Changing power usage to" + power);
-                                ((UtilityDevice)smartDevices.get(deviceInput)).setPowerUsage(power);
-                            break;
+                            case 3: // Vacuum
+                                System.out.println("\nDevice Functions: \n1. Toggle Power - "    +                 (smartDevices.get(deviceInput).getIsOn() ? "On" : "Off")                    +
+                                                                       "\n2. Set Power Usage - " +  ((UtilityDevice)smartDevices.get(deviceInput)).getPowerUsage()                             +
+                                                                       "\n3. Toggle Cleaning - " +        (((Vacuum)smartDevices.get(deviceInput)).getIsClean() ? "Cleaning" : "Not Cleaning") +  
+                                                                       "\n4. Show Information");
 
-                            case 2:
-                                System.out.println(smartDevices.get(deviceInput));
+                                System.out.print("Enter option number: ");
+
+                                deviceOption = input.nextInt();
+
+                                switch(deviceOption)
+                                {
+                                    case 1:
+                                        smartDevices.get(deviceInput).setIsOn(!smartDevices.get(deviceInput).getIsOn());
+                                    break;
+
+                                    case 2:
+                                        System.out.print("Enter power usage: ");
+                                        int power = input.nextInt();
+                                        System.out.println("Changing power usage to " + power);
+                                        ((UtilityDevice)smartDevices.get(deviceInput)).setPowerUsage(power);
+                                    break;
+
+                                    case 3:
+                                        ((Vacuum)smartDevices.get(deviceInput)).setIsClean(!((Vacuum)smartDevices.get(deviceInput)).getIsClean());
+                                    break;
+
+                                    case 4:
+                                        System.out.println(smartDevices.get(deviceInput));
+                                    break;
+
+                                    default:
+                                        throw new Exception("Exiting...");
+                                }
                             break;
 
                             default:
-                                try 
-                                {
-                                    if(deviceOption < 0 || deviceOption > 2)
-                                    {
-                                        throw new Exception("Exiting...");
-                                    }
-                                } 
-                                catch (Exception e) 
-                                {
-                                    System.out.println(e.getMessage());
-                                }
+                                throw new Exception("Exiting...");
                         }
-                    }
+                    } 
                     catch(Exception e)
                     {
                         System.out.println(e.getMessage());
@@ -232,71 +268,144 @@ public class App {
                 break;
 
                 case 2:
-                    System.out.println("Comfort Devices: \n1. Smart Thermostat\n2. Smart Ceiling Fan");
+                    System.out.println("Comfort Devices: \n1. Smart Thermostat\n2. Smart Ceiling Fan\n3. Smart TV");
                     System.out.print("Which comfort device do you wish to change?: ");
 
                     try
                     {
-                        deviceInput = input.nextInt() + 3;
+                        deviceInput = input.nextInt() + 3; // offset because it is also used as an index for the array list
 
-                        if(deviceInput < 4 || deviceInput > 5)
+                        switch(deviceInput)
                         {
-                            throw new Exception("Exiting...");
-                        }
+                            case 4: // Thermostat
+                                System.out.println("\nDevice Functions: \n1. Toggle Power - "    +             (smartDevices.get(deviceInput).getIsOn() ? "On" : "Off") +
+                                                                       "\n2. Set Temperature - " + ((Thermostat)smartDevices.get(deviceInput)).getTemperatureSetting()  + 
+                                                                       "\n3. Show Information");  
 
-                        System.out.println("\nDevice Functions: \n1. Toggle Power - "            +                (smartDevices.get(deviceInput).getIsOn() ? "On" : "Off") +
-                                                               "\n2. Set Temperature Setting - " + ((ComfortDevice)smartDevices.get(deviceInput)).getTemperatureSetting()  + 
-                                                               "\n3. Show Information");
-                        
-                        System.out.print("Enter option number: ");
+                                System.out.print("Enter option number: ");
 
-                        deviceOption = input.nextInt() - 1;
+                                deviceOption = input.nextInt();
 
-                        switch(deviceOption)
-                        {
-                            case 0:
-                                smartDevices.get(deviceInput).setIsOn(!smartDevices.get(deviceInput).getIsOn());
+                                switch(deviceOption)
+                                {
+                                    case 1:
+                                        smartDevices.get(deviceInput).setIsOn(!smartDevices.get(deviceInput).getIsOn());
+                                    break;
+
+                                    case 2:
+                                        //System.out.println("DEBUG: isOn =" + ((ComfortDevice)smartDevices.get(deviceInput)).getIsOn());
+                                        System.out.print("Enter temperature: ");
+                                        int temperature = input.nextInt();
+
+                                        // Exception for setting temp, when device is off----------------
+                                        // Menu input isn't working properly so I'll have to comment this
+                                        // part out for now -MeiLi---------------------------------------
+
+                                        try
+                                        {
+                                            // Set temp while device off
+                                            ((Thermostat)smartDevices.get(deviceInput)).setTemperatureSetting(temperature);
+                                            System.out.println("Changing temperature to " + temperature);
+                                        }
+                                        catch(DeviceNotOn e) // Exception is met, and caught here
+                                        {
+                                            System.out.println(e.getMessage());     // Prints error message
+                                        }
+                                    break;
+
+                                    case 3:
+                                        System.out.println(smartDevices.get(deviceInput));
+                                    break;
+
+                                    default:
+                                        throw new Exception("Exiting...");
+                                }
                             break;
 
-                            case 1:
-                                System.out.println("DEBUG: isOn =" + ((ComfortDevice)smartDevices.get(deviceInput)).getIsOn());
-                                System.out.print("Enter temperature: ");
-                                int temperature = input.nextInt();
-                                input.nextLine();   // clears
-                                // Exception for setting temp, when device is off----------------
-                                // Menu input isn't working properly so I'll have to comment this
-                                // part out for now -MeiLi---------------------------------------
-                                // try{
-                                //     // Set temp while device off
-                                //     ((ComfortDevice)smartDevices.get(deviceInput)).setTemperatureSetting(temperature);
-                                //     System.out.println("Changing temperature to " + temperature);
-                                // }
-                                // catch(DeviceNotOn e) // Exception is met, and caught here
-                                // {
-                                //     System.out.println(e.getMessage());     // Prints error message
-                                // }
+                            case 5: // Ceiling fan
+                                System.out.println("\nDevice Functions: \n1. Toggle Power - "            +             (smartDevices.get(deviceInput).getIsOn() ? "On" : "Off") +
+                                                                       "\n2. Set Rpm - "                 + ((CeilingFan)smartDevices.get(deviceInput)).getRpm()                 + 
+                                                                       "\n3. Show Information");  
                                 
+                                System.out.print("Enter option number: ");
 
+                                deviceOption = input.nextInt();
+
+                                switch(deviceOption)
+                                {
+                                    case 1:
+                                        smartDevices.get(deviceInput).setIsOn(!smartDevices.get(deviceInput).getIsOn());
+                                    break;
+
+                                    case 2:
+                                        System.out.print("Enter rpm: ");
+                                        int rpm = input.nextInt();
+
+                                        try
+                                        {
+                                            // Set temp while device off
+                                            ((CeilingFan)smartDevices.get(deviceInput)).setRpm(rpm);
+                                            System.out.println("Changing rpm to " + rpm);
+                                        }
+                                        catch(DeviceNotOn e) // Exception is met, and caught here
+                                        {
+                                            System.out.println(e.getMessage());     // Prints error message
+                                        }
+                                    break;
+
+                                    case 3:
+                                        System.out.println(smartDevices.get(deviceInput));
+                                    break;
+
+                                    default:
+                                        throw new Exception("Exiting...");
+                                }
                             break;
 
-                            case 2:
-                                System.out.println(smartDevices.get(deviceInput));
+                            case 6: // TV
+                                System.out.println("\nDevice Functions: \n1. Toggle Power - "            +             (smartDevices.get(deviceInput).getIsOn() ? "On" : "Off") +
+                                                                       "\n2. Set Channel - "             + ((Television)smartDevices.get(deviceInput)).getChannel()             +
+                                                                       "\n3. Show Information");
+                                
+                                System.out.print("Enter option number: ");
+
+                                deviceOption = input.nextInt();
+
+                                switch(deviceOption)
+                                {
+                                    case 1:
+                                        smartDevices.get(deviceInput).setIsOn(!smartDevices.get(deviceInput).getIsOn());
+                                    break;
+
+                                    case 2:
+                                        System.out.print("Enter channel: ");
+                                        int channel = input.nextInt();
+
+                                        try
+                                        {
+                                            // Set temp while device off
+                                            ((Television)smartDevices.get(deviceInput)).setChannel(channel);
+                                            System.out.println("Changing channel to " + channel);
+                                        }
+                                        catch(DeviceNotOn e) // Exception is met, and caught here
+                                        {
+                                            System.out.println(e.getMessage());     // Prints error message
+                                        }
+                                    break;
+
+                                    case 3:
+                                        System.out.println(smartDevices.get(deviceInput));
+                                    break;
+
+                                    default:
+                                        throw new Exception("Exiting...");
+                                }
                             break;
 
                             default:
-                                try 
-                                {
-                                    if(deviceOption < 0 || deviceOption > 2)
-                                    {
-                                        throw new Exception("Exiting...");
-                                    }
-                                } 
-                                catch (Exception e) 
-                                {
-                                    System.out.println(e.getMessage());
-                                }
+                                throw new Exception("Exiting...");
                         }
-                    }
+                    } 
                     catch(Exception e)
                     {
                         System.out.println(e.getMessage());
