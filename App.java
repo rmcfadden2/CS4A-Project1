@@ -10,8 +10,8 @@ public class App {
         smartDevices.add(new SecurityDevice("Door Sensor", "White", 2025, true,  "Front Door"));
         smartDevices.add(new SecurityDevice("Camera",      "White", 2016, false, "Backyard"));
 
-        smartDevices.add(new Lightbulb("Smart Lightbulb" , "Yellow"  , 2011,30, 100));
-        smartDevices.add(new Vacuum(   "Smart Vacuum"    , "Black"   , 2018,300, false));
+        smartDevices.add(new Lightbulb("Smart Lightbulb" , "Yellow"  , 2011, 30, 100));
+        smartDevices.add(new Vacuum(   "Smart Vacuum"    , "Black"   , 2018, 300, false));
 
         smartDevices.add(new Thermostat("Smart Thermostat"   , "Light Grey", 2014, 70));  
         smartDevices.add(new CeilingFan("Smart Ceiling Fan"  , "White",      2014, 120));                                                                                                                     
