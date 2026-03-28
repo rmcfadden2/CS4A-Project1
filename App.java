@@ -133,6 +133,7 @@ public class App {
                             break;
 
                             case 7:
+                                input.nextLine();           // Clears buffer (clears \n from) after integer 7 input is read.
                                 System.out.print("Enter user to add: ");
                                 String user = input.nextLine();
                                 System.out.println("Adding new user " + user + "...");
@@ -142,6 +143,7 @@ public class App {
                             case 8:
                                 try
                                 {
+                                    input.nextLine();       // Clears buffer after integer 8 input is read
                                     System.out.print("Enter user to remove: ");
                                     String user2 = input.nextLine();
                                     System.out.println("Removing " + user2 + "...");
@@ -240,7 +242,7 @@ public class App {
                                     case 2:
                                         System.out.print("Enter power usage: ");
                                         int power = input.nextInt();
-                                        System.out.println("Changing power usage to " + power);
+                                        System.out.println("Changing power usage to  " + power);
                                         ((UtilityDevice)smartDevices.get(deviceInput)).setPowerUsage(power);
                                     break;
 
@@ -293,14 +295,8 @@ public class App {
                                     break;
 
                                     case 2:
-                                        //System.out.println("DEBUG: isOn =" + ((ComfortDevice)smartDevices.get(deviceInput)).getIsOn());
-                                        System.out.print("Enter temperature: ");
+                                        System.out.print("Enter new temperature: ");
                                         int temperature = input.nextInt();
-
-                                        // Exception for setting temp, when device is off----------------
-                                        // Menu input isn't working properly so I'll have to comment this
-                                        // part out for now -MeiLi---------------------------------------
-
                                         try
                                         {
                                             // Set temp while device off
